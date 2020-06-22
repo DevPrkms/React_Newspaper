@@ -33,7 +33,8 @@ function getLocation() {
         axios
             .get(`https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${loc.lon}&y=${loc.lat}&input_coord=WGS84`, option)
             .then(function (response) {
-                address = response.data.documents[0].road_address.region_1depth_name + " " + response.data.documents[0].road_address.region_2depth_name;
+                console.log(response.data)
+                address = response.data.documents[0].address.region_1depth_name + " " + response.data.documents[0].address.region_2depth_name;
                 document.getElementById("location-name").innerHTML = address;
             })
         // https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${loc.lon}&y=${loc.lat}&input_coord=WGS84
