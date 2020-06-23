@@ -7,18 +7,15 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import sun.awt.image.PNGImageDecoder;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedMap;
 
 @RestController
 public class ApiController {
@@ -38,6 +35,9 @@ public class ApiController {
     public List<News> newscrawl(HttpServletRequest request, HttpServletResponse response) {
         // Jsoup를 이용해서 네이버 뉴스 크롤링
         String search_query = request.getParameter("address");
+        int page = Integer.parseInt(request.getParameter("page"));
+        System.out.println(page);
+        int size = 10;
         int startcnt = 1;
 
         List<String> title = new ArrayList<>();
@@ -91,7 +91,9 @@ public class ApiController {
             newsRepository.save(news);
         }
 
-        List<News> rList = newsRepository.findAll();
+        List<News> rList = new ArrayList<>();
+        PageRequest pageRequest = PageRequest.of(page, size);
+        rList = newsRepository.findAll(pageRequest).toList();
 
         return rList;
     }

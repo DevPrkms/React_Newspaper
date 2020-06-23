@@ -24,6 +24,8 @@ function getLocation() {
 
         let address = "";
 
+        let page = 0;
+
         let option = {
             headers: {
                 Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_RESTAPI_KEY}`,
@@ -37,7 +39,7 @@ function getLocation() {
                 document.getElementById("location-name").innerHTML = address;
 
                 axios
-                    .get(`/newscrawl?address=${address}`)
+                    .get(`/newscrawl?address=${address}&page=${page}`)
                     .then(function (response) {
                         if(response.data.length > 0) {
                             let HTML = "";
@@ -52,6 +54,50 @@ function getLocation() {
                             }
                         }
                     })
+
+                function getDocumentHeight() {
+                    const body = document.body;
+                    const html = document.documentElement;
+
+                    return Math.max(
+                        body.scrollHeight, body.offsetHeight,
+                        html.clientHeight, html.scrollHeight, html.offsetHeight
+                    )
+                }
+
+                function getScrollTop() {
+                    return (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+                }
+
+                function appendHtml(el, str) {
+                    let div = document.createElement('div');
+                    div.innerHTML = str;
+                    while (div.children.length > 0) {
+                        el.appendChild(div.children[0]);
+                    }
+                }
+
+                window.onscroll = function() {
+                    if (getScrollTop() < getDocumentHeight() - window.innerHeight) return;
+                    page ++
+                    axios
+                        .get(`/newscrawl?address=${address}&page=${page}`)
+                        .then(function (response) {
+                            if (response.data.length > 0) {
+                                let HTML = "";
+                                for (let i = 0; i < response.data.length; i++) {
+                                    HTML += `<div class="newswrapper">`;
+                                    HTML += `<a href="${response.data[i].article}">`;
+                                    HTML += `<h3 class="news-title">${response.data[i].title}</h3>`;
+                                    HTML += `<span class="news-contents">${response.data[i].contents}</span>`;
+                                    HTML += `</a>`;
+                                    HTML += `</div>`;
+                                    // document.getElementById("newscontents").appendChild(HTML);
+                                }
+                                appendHtml(document.getElementById("newscontents"), HTML);
+                            }
+                        })
+                }
             })
         // https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${loc.lon}&y=${loc.lat}&input_coord=WGS84
         // process.env.REACT_APP_KAKAO_API_KEY // JAVASCRIPT
