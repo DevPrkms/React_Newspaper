@@ -15,6 +15,12 @@ function App() {
     );
 }
 
+axios
+    .get("/getNews")
+    .then(function(response){
+    console.log(response.data);
+})
+
 function getLocation() {
     navigator.geolocation.getCurrentPosition(function (position) {
         const loc = {
@@ -25,6 +31,8 @@ function getLocation() {
         let address = "";
 
         let page = 0;
+
+        let cntcnt = 0;
 
         let option = {
             headers: {

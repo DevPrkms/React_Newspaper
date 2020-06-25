@@ -30,6 +30,14 @@ public class ApiController {
 
     static int cocnt = 0;
 
+
+    @RequestMapping(value = "/getNews")
+    @ResponseBody
+    public String getNews() {
+        String url = "/newscrawl";
+        return url;
+    }
+
     @RequestMapping(value = "/newscrawl", method = RequestMethod.GET)
     @ResponseBody
     public List<News> newscrawl(HttpServletRequest request, HttpServletResponse response) {
@@ -37,6 +45,10 @@ public class ApiController {
         String search_query = request.getParameter("address");
         int page = Integer.parseInt(request.getParameter("page"));
         System.out.println(page);
+        int totalCnt = (int)newsRepository.count();
+        if (((page+1)*10) == totalCnt) {
+            System.out.println("ㅋㅋㄹㅋㅋ");
+        }
         int size = 10;
         int startcnt = 1;
 
@@ -46,7 +58,7 @@ public class ApiController {
 
         newsRepository.deleteAll();
 
-        for (int cnt = 0; cnt < 3; cnt++) {
+        for (int cnt = 0; cnt < 5; cnt++) {
             String url = "https://search.naver.com/search.naver?&where=news&query=" + search_query + "&sm=tab_pge&sort=0&photo=0&field=0&reporter_article=&pd=0&ds=&de=&docid=&nso=so:r,p:all,a:all&mynews=0&cluster_rank=35&start=" + startcnt + "&refresh_start=0"; //크롤링할 url지정
             Document doc = null;        //Document에는 페이지의 전체 소스가 저장된다
 

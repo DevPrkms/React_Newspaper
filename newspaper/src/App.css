@@ -60,11 +60,16 @@ a:visited {
     vertical-align: bottom;
 }
 
-.btn-right img {
-    transform: rotate(-90deg);
+#btn-right {
+    background-color: white;
+    padding: 15px 15px 15px 15px;
+    border-radius: 10px;
 }
 
-.btn-right img:hover {
-    transform: rotate(270deg);
-    transition: 1s;
+#btn-right:hover {
+    background-color: #808080;
+}
+
+.arrow-icon {
+    margin-left: 10px;
 }
