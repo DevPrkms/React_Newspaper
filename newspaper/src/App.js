@@ -40,6 +40,8 @@ function getLocation() {
             }
         }
 
+        // 접속 로직 수정해야함
+
         axios
             .get(`https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${loc.lon}&y=${loc.lat}&input_coord=WGS84`, option)
             .then(function (response) {
