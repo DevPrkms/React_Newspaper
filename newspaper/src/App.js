@@ -41,6 +41,8 @@ function getLocation() {
         }
 
         // 접속 로직 수정해야함
+        // 1. 크롤링 요청 및 실행로직 분리 ?
+        // 2. 그냥 일체화 ?
 
         axios
             .get(`https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${loc.lon}&y=${loc.lat}&input_coord=WGS84`, option)
